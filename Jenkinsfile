@@ -61,9 +61,14 @@ node('staging') {
         sh 'npm i'
     }
 
+    stage('Test') {
+        echo 'Testing...'
+        sh 'npm test'
+    }
+
     stage('Run Application') {
+        echo 'Stopping old process to run new process...'
         sh '''
-        # run with pm2
         npm run pm2-stop
         npm run pm2-start
         '''
