@@ -1,0 +1,51 @@
+{
+  "name": "jenkins-pipeline-express",
+  "version": "1.0.0",
+  "description": "Small express application to show TDD with Jenkins 2.0 pipelines",
+  "main": "index.js",
+  "scripts": {
+    "pm2-start": "pm2 start -f index.js --name 'jenkins-pipeline-express'",
+    "pm2-stop": "pm2 stop 'jenkins-pipeline-express'",
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/.vscode/**",
+      "!**/.git/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "functions": 25
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jtaylor32/jenkins-pipeline-express.git"
+  },
+  "keywords": [
+    "TDD",
+    "jenkins",
+    "pipelines",
+    "express",
+    "node",
+    "deployment"
+  ],
+  "author": "Jordan Taylor @jtaylor32",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jtaylor32/jenkins-pipeline-express/issues"
+  },
+  "homepage": "https://github.com/jtaylor32/jenkins-pipeline-express#readme",
+  "dependencies": {
+    "express": "^4.14.1"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
+  }
+}
