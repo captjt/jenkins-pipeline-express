@@ -1,9 +1,9 @@
-var express = require("express");
-var utils = require("./controllers/utils");
-var app = express();
+const express = require("express");
+const utils = require("./controllers/utils");
+const app = express();
 
-var envOne = process.env.VARIABLE_1;
-var envTwo = process.env.VARIABLE_2;
+const envOne = process.env.VARIABLE_1;
+const envTwo = process.env.VARIABLE_2;
 
 app.get("/", function(req, res) {
   res.send("Hello World!");
