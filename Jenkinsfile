@@ -1,10 +1,4 @@
-node('testing') {
-    stage('Initialize') {
-        echo 'Initializing...'
-        def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        env.PATH = "${node}/bin:${env.PATH}"
-    }
-
+node('androidbuild') {
     stage('Checkout') {
         echo 'Getting source code...'
         checkout scm
@@ -33,15 +27,10 @@ node('testing') {
     }
 }
 
-node('staging') {
+node('androidbuildnext') {
     stage('Initialize'){
         echo 'Initializing...'
-        def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        env.PATH = "${node}/bin:${env.PATH}"
-
         sh "node -v"
-
-        // set environment variables
         env.VARIABLE_1="10"
         env.VARIABLE_2="7"
     }
