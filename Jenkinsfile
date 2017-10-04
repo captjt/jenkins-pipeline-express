@@ -1,10 +1,4 @@
 node('androidbuild') {
-    // stage('Initialize') {
-    //     echo 'Initializing...'
-    //     def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-    //     env.PATH = "${node}/bin:${env.PATH}"
-    // }
-
     stage('Checkout') {
         echo 'Getting source code...'
         checkout scm
@@ -33,46 +27,41 @@ node('androidbuild') {
     }
 }
 
-// node('staging') {
-//     stage('Initialize'){
-//         echo 'Initializing...'
-//         def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-//         env.PATH = "${node}/bin:${env.PATH}"
+node('androidbuildnext') {
+    stage('Initialize'){
+        echo 'Initializing...'
+        sh "node -v"
+        env.VARIABLE_1="10"
+        env.VARIABLE_2="7"
+    }
 
-//         sh "node -v"
+    stage('Checkout') {
+        echo 'Getting source code...'
+        checkout scm
+    }
 
-//         // set environment variables
-//         env.VARIABLE_1="10"
-//         env.VARIABLE_2="7"
-//     }
+    stage('PM2 Install') {
+        echo 'Installing PM2 to run application as daemon...'
+        sh "npm install pm2 -g"
+    }
 
-//     stage('Checkout') {
-//         echo 'Getting source code...'
-//         checkout scm
-//     }
+    stage('Build') {
+        echo 'Building dependencies...'
+        sh 'npm i'
+    }
 
-//     stage('PM2 Install') {
-//         echo 'Installing PM2 to run application as daemon...'
-//         sh "npm install pm2 -g"
-//     }
+    stage('Test') {
+        echo 'Testing...'
+        sh 'npm test'
+    }
 
-//     stage('Build') {
-//         echo 'Building dependencies...'
-//         sh 'npm i'
-//     }
-
-//     stage('Test') {
-//         echo 'Testing...'
-//         sh 'npm test'
-//     }
-
-//     stage('Run Application') {
-//         echo 'Stopping old process to run new process...'
-//         sh '''
-//         npm run pm2-stop
-//         npm run pm2-start
-//         '''
-//     }
-// }
+    stage('Run Application') {
+        echo 'Stopping old process to run new process...'
+        sh '''
+        npm run pm2-stop
+        npm run pm2-start
+        '''
+    }
+}
 
 
