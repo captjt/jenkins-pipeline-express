@@ -60,5 +60,3 @@ node('androidbuildnext') {
         // sh 'ansible-playbook webapi-playbook.yml'
     }
 }
-
-
