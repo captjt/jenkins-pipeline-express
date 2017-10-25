@@ -7,6 +7,9 @@ node('master') {
     stage('Build') {
         echo 'Building dependencies...'
         sh 'npm i'
+    }
+
+    stage("kat gaya") {
         sh "echo start"        
         sh "echo git branch"        
         sh "echo ${env.GIT_BRANCH}"
@@ -35,16 +38,27 @@ node('master') {
         sh 'npm test'
     }
 
-    stage('Publish') {
-        echo 'Publishing Test Coverage'
-		publishHTML (target: [
-			allowMissing: false,
-			alwaysLinkToLastBuild: false,
-			keepAll: true,
-			reportDir: 'coverage/lcov-report',
-			reportFiles: 'index.html',
-			reportName: "Application Test Coverage"
-		])
+    // stage('Publish') {
+    //     echo 'Publishing Test Coverage'
+	// 	publishHTML (target: [
+	// 		allowMissing: false,
+	// 		alwaysLinkToLastBuild: false,
+	// 		keepAll: true,
+	// 		reportDir: 'coverage/lcov-report',
+	// 		reportFiles: 'index.html',
+	// 		reportName: "Application Test Coverage"
+	// 	])
+    // }
+
+    stage('Pack Application') {
+        echo 'Packing application'
+        sh 'npm pack'
+    }
+
+    stage('Run web api playbook') {
+        echo 'web apis playbook'
+        sh 'pwd'
+        sh 'ansible-playbook webapi-playbook.yml'
     }
 }
 
@@ -71,14 +85,14 @@ node('master') {
 //         sh 'npm test'
 //     }
 
-//     stage('Pack Application') {
-//         echo 'Packing application'
-//         sh 'npm pack'
-//     }
+    // stage('Pack Application') {
+    //     echo 'Packing application'
+    //     sh 'npm pack'
+    // }
 
-//     stage('Run web api playbook') {
-//         echo 'web apis playbook'
-//         sh 'pwd'
-//         // sh 'ansible-playbook webapi-playbook.yml'
-//     }
+    // stage('Run web api playbook') {
+    //     echo 'web apis playbook'
+    //     sh 'pwd'
+    //     // sh 'ansible-playbook webapi-playbook.yml'
+    // }
 // }
