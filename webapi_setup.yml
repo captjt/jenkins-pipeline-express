@@ -1,0 +1,19 @@
+---
+
+- hosts: webapi
+  become: yes
+  become_user: root
+
+  tasks:
+    - name: Copy the web api packed folder to web api servers
+      copy: 
+        src: /home/vagrant/jenkins/workspace/jenkins-pipeline-express/jenkins-pipeline-express-1.0.0.tgz
+        dest: /home/vagrant
+        owner: vagrant
+        group: vagrant
+        mode: 0755
+    
+    - name: Extract web api tgz into /opt directory
+      unarchive:
+        src: /home/vagrant/jenkins-pipeline-express-1.0.0.tgz
+        dest: /opt/

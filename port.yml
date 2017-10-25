@@ -1,0 +1,56 @@
+---
+
+- hosts: webapi
+  become: yes
+  become_user: root
+
+  vars:
+    start_port: 9000
+
+  tasks:
+    - name: Copy the web api packed folder to web api servers
+      copy: 
+        src: /home/vagrant/jenkins/workspace/jenkins-pipeline-express/jenkins-pipeline-express-1.0.0.tgz
+        dest: /home/vagrant
+        owner: vagrant
+        group: vagrant
+        mode: 0755
+    
+    - name: Extract web api tgz into /opt directory
+      unarchive:
+        src: /home/vagrant/jenkins-pipeline-express-1.0.0.tgz
+        dest: /opt/web-api
+
+    - name: Find empty port
+      shell: ss -tln | awk 'NR > 1{gsub(/.*:/,"",$4); print $4}' | sort -un | awk -v n={{ start_port }} '$0 < n {next}; $0 == n {n++; next}; {exit}; END {print n}'
+      register: port
+
+    - name: Printing Result
+      debug: msg={{ port.stdout }}
+
+    - name: Printing execution trace
+      debug: var=port
+
+    - name: Check for server file
+      stat:
+        path: /opt/web-api/server.js
+      register: server_file
+
+    - name: Print result of stat
+      debug: var={{ server_file.stat.exists }}
+
+    - name: Install pm2
+      npm: name=pm2 global=yes
+
+    - name: check pm2 version
+      command: "pm2 -v"
+      ignore_errors: True
+
+    - name: list  pm2 processes if running
+      command: "pm2 list"
+      ignore_errors: True
+
+    - name: Start server on port {{ port.stdout}}
+      shell: NODE_PORT={{ port.stdout }} pm2 start /opt/web-api/server.js
+      when: server_file.stat.exists
+      ignore_errors: yes
