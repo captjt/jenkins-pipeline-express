@@ -1,12 +1,6 @@
-node('testing') {
-    stage('Initialize') {
-        echo 'Initializing...'
-        def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        env.PATH = "${node}/bin:${env.PATH}"
-    }
-
+node('master') {
     stage('Checkout') {
-        echo 'Getting source code...'
+        echo 'Getting source code'
         checkout scm
     }
 
@@ -15,64 +9,88 @@ node('testing') {
         sh 'npm i'
     }
 
-    stage('Test') {
-        echo 'Testing...'
-        sh 'npm test'
-    }
-
-    stage('Publish') {
-        echo 'Publishing Test Coverage...'
-		publishHTML (target: [
-			allowMissing: false,
-			alwaysLinkToLastBuild: false,
-			keepAll: true,
-			reportDir: 'coverage/lcov-report',
-			reportFiles: 'index.html',
-			reportName: "Application Test Coverage"
-		])
-    }
-}
-
-node('staging') {
-    stage('Initialize'){
-        echo 'Initializing...'
-        def node = tool name: 'Node-7.4.0', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
-        env.PATH = "${node}/bin:${env.PATH}"
-
-        sh "node -v"
-
-        // set environment variables
-        env.VARIABLE_1="10"
-        env.VARIABLE_2="7"
-    }
-
-    stage('Checkout') {
-        echo 'Getting source code...'
-        checkout scm
-    }
-
-    stage('PM2 Install') {
-        echo 'Installing PM2 to run application as daemon...'
-        sh "npm install pm2 -g"
-    }
-
-    stage('Build') {
-        echo 'Building dependencies...'
-        sh 'npm i'
+    stage("kat gaya") {
+        sh "echo start"        
+        sh "echo git branch"        
+        sh "echo ${env.GIT_BRANCH}"
+        sh "echo pull description"
+        sh "echo ${env.ghprbPullDescription}"
+        sh "echo pull id"
+        sh "echo ${env.ghprbPullId}"
+        sh "echo pull link"
+        sh "echo ${env.ghprbPullLink}"
+        sh "echo pull title"
+        sh "echo ${env.ghprbPullTitle}"
+        sh "echo src branch"
+        sh "echo ${env.ghprbSourceBranch}"
+        sh "echo target branch"
+        sh "echo ${env.ghprbTargetBranch}"
+        sh "echo comment body"
+        sh "echo ${env.ghprbCommentBody}"
+        sh "echo end"
+        sh "echo hello"
     }
 
     stage('Test') {
-        echo 'Testing...'
+        echo 'Testing'
         sh 'npm test'
     }
 
-    stage('Run Application') {
-        echo 'Stopping old process to run new process...'
-        sh '''
-        npm run pm2-stop
-        npm run pm2-start
-        '''
+    // stage('Publish') {
+    //     echo 'Publishing Test Coverage'
+	// 	publishHTML (target: [
+	// 		allowMissing: false,
+	// 		alwaysLinkToLastBuild: false,
+	// 		keepAll: true,
+	// 		reportDir: 'coverage/lcov-report',
+	// 		reportFiles: 'index.html',
+	// 		reportName: "Application Test Coverage"
+	// 	])
+    // }
+
+    stage('Pack Application') {
+        echo 'Packing application'
+        sh 'npm pack'
+    }
+
+    stage('Run web api playbook') {
+        echo 'web apis playbook'
+        sh 'pwd'
+        sh 'ansible-playbook webapi-playbook.yml'
     }
 }
 
+// node('androidbuildnext') {
+//     stage('Initialize'){
+//         echo 'Initializing'
+//         sh "node -v"
+//         env.VARIABLE_1="10"
+//         env.VARIABLE_2="7"
+//     }
 
+//     stage('Checkout') {
+//         echo 'Getting source code'
+//         checkout scm
+//     }
+
+//     stage('Build') {
+//         echo 'Building dependencies'
+//         sh 'npm i'
+//     }
+
+//     stage('Test') {
+//         echo 'Testing'
+//         sh 'npm test'
+//     }
+
+    // stage('Pack Application') {
+    //     echo 'Packing application'
+    //     sh 'npm pack'
+    // }
+
+    // stage('Run web api playbook') {
+    //     echo 'web apis playbook'
+    //     sh 'pwd'
+    //     // sh 'ansible-playbook webapi-playbook.yml'
+    // }
+// }
