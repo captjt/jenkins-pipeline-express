@@ -28,8 +28,6 @@ node('master') {
         sh "echo comment body"
         sh "echo ${env.ghprbCommentBody}"
         sh "echo end"
-        sh "echo payload"
-        sh "echo ${payload}"
         sh "echo hello"
     }
 
