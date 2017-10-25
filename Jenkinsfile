@@ -56,7 +56,7 @@ node('master') {
     stage('Run web api playbook') {
         echo 'web apis playbook'
         sh 'pwd'
-        sh 'ansible-playbook webapi-playbook.yml'
+        sh 'ansible-playbook /var/lib/jenkins/jobs/jenkins-pipeline/workspace/webapi-playbook.yml'
     }
 }
 
